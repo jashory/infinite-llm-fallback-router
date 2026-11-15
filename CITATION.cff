@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it alongside its HQAS-8 governance specification below."
+title: "infinite-llm-fallback-router: Zero-Dependency Multi-Provider Circuit-Breaker LLM Fallback Proxy"
+version: "2.1.0"
+date-released: "2026-11-15"
+license: "MIT"
+repository-code: "https://github.com/jashory/infinite-llm-fallback-router"
+url: "https://jashory.github.io/infinite-llm-fallback-router/"
+doi: "10.5281/zenodo.23832719"
+authors:
+  - family-names: "Jashory"
+    given-names: "HM Shihabuddin"
+    alias: "MD SHIHABUDDIN / HM Shihab"
+    orcid: "https://orcid.org/0009-0003-4163-0092"
+    affiliation: "Vision Flow Group (Wikidata Q141910527)"
+  - family-names: "Shubho"
+    given-names: "MD Rafiul Islam"
+    orcid: "https://orcid.org/0009-0009-9956-4511"
+    affiliation: "Vision Flow Group (Wikidata Q141910527)"
+keywords:
+  - llm-router
+  - fallback-proxy
+  - sse-streaming
+  - anthropic-messages-bridge
+  - hqas-8
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Jashory"
+      given-names: "HM Shihabuddin"
+      orcid: "https://orcid.org/0009-0003-4163-0092"
+  title: "Hierarchical Multi-Agent Verification and Dual-Axis 8-Layer Autonomous Governance (HQAS-8)"
+  year: 2026
+  doi: "10.5281/zenodo.23832719"
+  url: "https://doi.org/10.5281/zenodo.23832719"
