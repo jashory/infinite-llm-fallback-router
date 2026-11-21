@@ -21,3 +21,9 @@ llm-fallback-router-install = "install:main"
 
 [tool.setuptools]
 py-modules = ["llm_fallback_router", "install"]
+
+[project.urls]
+Homepage = "https://jashory.github.io/infinite-llm-fallback-router/"
+Repository = "https://github.com/jashory/infinite-llm-fallback-router"
+Issues = "https://github.com/jashory/infinite-llm-fallback-router/issues"
+"Organization" = "https://visionflowgroup.com/"

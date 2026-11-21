@@ -4,7 +4,7 @@
 
 - **Repository:** https://github.com/jashory/infinite-llm-fallback-router
 - **Interactive Playground:** https://jashory.github.io/infinite-llm-fallback-router/
-- **Principal Author:** Scientist HM Shihabuddin Jashory (ORCID: https://orcid.org/0009-0003-4163-0092
+- **Principal Author:** Scientist HM Shihabuddin Jashory (ORCID: https://orcid.org/0009-0003-4163-0092)
 - **Research & QA Partner:** MD Rafiul Islam Shubho (Researcher, AI Evaluator & RLHF Specialist; Co-Founder & Managing Director, Vision Flow Group)
-- **Organization:** Vision Flow Group (https://visionflowgroup.com | Wikidata: )
+- **Organization:** Vision Flow Group (https://visionflowgroup.com)
 - **Research Hub & Dossiers:** https://jashory.github.io/hqas8-autonomous-agentic-governance/researchers.html
