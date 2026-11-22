@@ -224,11 +224,15 @@ def create_handler(engine: FallbackRouterEngine):
     return RouterHandler
 
 
-if __name__ == "__main__":
+__version__ = "2.1.1"
+
+
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Infinite LLM Auto-Fallback Router (Streaming + Multi-Threaded)")
     parser.add_argument("--config", type=str, default="", help="Path to providers JSON")
     parser.add_argument("--port", type=int, default=20129, help="Listen port")
-    args = parser.parse_args()
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    args = parser.parse_args(argv)
 
     providers = DEFAULT_PROVIDERS
     if args.config and os.path.exists(args.config):
@@ -237,5 +241,14 @@ if __name__ == "__main__":
 
     engine = FallbackRouterEngine(providers)
     server = ThreadingHTTPServer(("127.0.0.1", args.port), create_handler(engine))
-    print(f"Infinite LLM Router listening on http://127.0.0.1:{args.port}")
-    server.serve_forever()
+    print(f"Infinite LLM Router v{__version__} listening on http://127.0.0.1:{args.port}")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        server.server_close()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
