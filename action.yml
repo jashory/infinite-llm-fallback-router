@@ -1,12 +1,12 @@
 name: 'Infinite LLM Fallback Router Check'
-description: 'Verify multi-provider LLM fallback routing, circuit breaker health, and backoff configuration.'
+description: 'Verify multi-provider LLM fallback routing, circuit breaker failover, SSE streaming, and Anthropic bridge.'
 author: 'HM Shihabuddin Jashory (@jashory)'
 branding:
   icon: 'cpu'
   color: 'blue'
 inputs:
   args:
-    description: 'CLI arguments to pass to fallback_router.py'
+    description: 'CLI arguments to pass to llm_fallback_router.py'
     required: false
     default: '--self-test'
 runs:
@@ -14,4 +14,4 @@ runs:
   steps:
     - name: Validate LLM Fallback Router
       shell: bash
-      run: python3 "${{ github.action_path }}/fallback_router.py" ${{ inputs.args }}
+      run: python3 "${{ github.action_path }}/llm_fallback_router.py" ${{ inputs.args }}

@@ -1,0 +1,77 @@
+name: Cloud CI — Failover Self-Test, Stdio MCP & Docker Container Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  verify-router-and-mcp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Deterministic Loopback Failover, Cooldown, SSE & Anthropic Bridge Self-Test
+        run: python3 llm_fallback_router.py --self-test
+
+      - name: Verify Stdio JSON-RPC 2.0 MCP Server
+        run: |
+          python3 - <<'PY'
+          import json, subprocess, sys
+
+          rpc_in = "\n".join([
+              json.dumps({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05"}}),
+              json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}),
+              json.dumps({"jsonrpc": "2.0", "id": 2, "method": "ping"}),
+              json.dumps({"jsonrpc": "2.0", "id": 3, "method": "tools/list"}),
+              json.dumps({"jsonrpc": "2.0", "id": 4, "method": "resources/list"}),
+              json.dumps({"jsonrpc": "2.0", "id": 5, "method": "prompts/list"}),
+              json.dumps({"jsonrpc": "2.0", "id": 6, "method": "tools/call", "params": {"name": "list_provider_pool", "arguments": {}}}),
+              json.dumps({"jsonrpc": "2.0", "id": 7, "method": "tools/call", "params": {"name": "convert_anthropic_to_openai", "arguments": {"model": "claude-sonnet-4-5", "system": "Be concise", "messages": [{"role": "user", "content": "hi"}]}}}),
+              json.dumps({"jsonrpc": "2.0", "id": 8, "method": "tools/call", "params": {"name": "check_router_health", "arguments": {}}}),
+          ]) + "\n"
+
+          p = subprocess.run([sys.executable, "llm_fallback_router.py", "--mcp"], input=rpc_in, capture_output=True, text=True, timeout=20)
+          assert p.returncode == 0, p.stderr
+          lines = [json.loads(x) for x in p.stdout.strip().splitlines()]
+          assert len(lines) == 8, lines
+          assert lines[0]["result"]["serverInfo"]["name"] == "infinite-llm-fallback-router"
+          assert lines[1]["result"] == {}
+          tool_names = {t["name"] for t in lines[2]["result"]["tools"]}
+          assert {"list_provider_pool", "convert_anthropic_to_openai", "route_chat_completion", "check_router_health"} <= tool_names
+          assert lines[3]["result"]["resources"] == []
+          assert lines[4]["result"]["prompts"] == []
+          pool = json.loads(lines[5]["result"]["content"][0]["text"])
+          assert len(pool["providers"]) >= 1
+          conv = json.loads(lines[6]["result"]["content"][0]["text"])
+          assert conv["messages"][0]["role"] == "system" and conv["messages"][1]["content"] == "hi"
+          health = json.loads(lines[7]["result"]["content"][0]["text"])
+          assert health["status"] == "ok" and health["ready_providers"] >= 1
+          print("PYTHON STDIO MCP VERIFICATION PASSED:", sorted(tool_names))
+          PY
+
+      - name: Build Docker Image & Verify Live Stdio MCP Protocol Inside Container (Glama Inspector Check)
+        run: |
+          docker build -t infinite-llm-fallback-router:ci .
+          python3 - <<'PY'
+          import json, subprocess
+
+          rpc_in = "\n".join([
+              json.dumps({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05"}}),
+              json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}),
+              json.dumps({"jsonrpc": "2.0", "id": 2, "method": "tools/list"}),
+              json.dumps({"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "check_router_health", "arguments": {}}}),
+          ]) + "\n"
+          p = subprocess.run(["docker", "run", "-i", "--rm", "infinite-llm-fallback-router:ci"], input=rpc_in, capture_output=True, text=True, timeout=30)
+          assert p.returncode == 0, f"Docker MCP failed: {p.stderr}"
+          lines = [json.loads(x) for x in p.stdout.strip().splitlines()]
+          assert len(lines) == 3, lines
+          assert lines[0]["result"]["serverInfo"]["name"] == "infinite-llm-fallback-router"
+          assert len(lines[1]["result"]["tools"]) == 4
+          health = json.loads(lines[2]["result"]["content"][0]["text"])
+          assert health["status"] == "ok"
+          print("DOCKER LIVE MCP CONTAINER VERIFICATION PASSED! Tools:", [t["name"] for t in lines[1]["result"]["tools"]])
+          PY

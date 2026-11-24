@@ -1,14 +1,31 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jashory/infinite-llm-fallback-router",
-  "title": "Infinite LLM Fallback Router",
-  "description": "Zero-dependency multi-provider SSE circuit-breaker LLM proxy and Anthropic /v1/messages bridge for resilient MCP and autonomous agent workflows.",
-  "version": "2.1.0",
+  "title": "Infinite LLM Fallback Router (MCP Server)",
+  "description": "Zero-dependency stdio Model Context Protocol (MCP) server, multi-provider SSE circuit-breaker LLM proxy, and Anthropic /v1/messages bridge.",
+  "version": "2.2.0",
   "websiteUrl": "https://jashory.github.io/infinite-llm-fallback-router/",
   "repository": {
     "url": "https://github.com/jashory/infinite-llm-fallback-router",
     "source": "github"
   },
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "infinite-llm-fallback-router",
+      "version": "2.2.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "runtimeHint": "python",
+      "packageArguments": [
+        {
+          "type": "named",
+          "name": "--mcp"
+        }
+      ]
+    }
+  ],
   "_meta": {
     "io.github.jashory/provenance": {
       "author": "HM Shihabuddin Jashory",

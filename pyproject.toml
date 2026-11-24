@@ -4,19 +4,20 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "infinite-llm-fallback-router"
-version = "2.1.1"
-description = "Zero-Dependency Multi-Provider LLM Auto-Fallback Proxy (SSE Streaming + Anthropic /v1/messages Bridge + 9Router Patches)"
+version = "2.2.0"
+description = "Zero-Dependency Stdio MCP Server & Multi-Provider LLM Auto-Fallback Proxy (SSE Streaming + Anthropic /v1/messages Bridge + 9Router Patches)"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.9"
 authors = [
   { name = "HM Shihabuddin Jashory (Shihab)", email = "contact@visionflowgroup.com" }
 ]
-keywords = ["llm-router", "fallback-proxy", "claude-code", "antigravity", "openai", "anthropic", "9router"]
+keywords = ["mcp-server", "llm-router", "fallback-proxy", "claude-code", "antigravity", "openai", "anthropic", "9router"]
 dependencies = []
 
 [project.scripts]
 llm-fallback-router = "llm_fallback_router:main"
+llm-fallback-router-mcp = "llm_fallback_router:run_mcp_server"
 llm-fallback-router-install = "install:main"
 
 [tool.setuptools]
