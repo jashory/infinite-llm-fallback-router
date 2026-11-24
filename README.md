@@ -1,7 +1,7 @@
 # ⚡ Infinite LLM Auto-Fallback Router — Stdio MCP Server, SSE Failover Proxy & 9Router Patch Kit (v2.2.0)
 
 <p align="center">
-  <a href="https://glama.ai/mcp/servers/@jashory/infinite-llm-fallback-router"><img src="https://glama.ai/mcp/servers/@jashory/infinite-llm-fallback-router/badge" alt="Infinite LLM Fallback Router on Glama"/></a>
+  <a href="https://glama.ai/mcp/servers/jashory/infinite-llm-fallback-router"><img src="https://glama.ai/mcp/servers/jashory/infinite-llm-fallback-router/badges/score.svg" alt="jashory/infinite-llm-fallback-router MCP server"/></a>
 </p>
 
 <p align="center">
